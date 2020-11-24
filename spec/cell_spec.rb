@@ -70,4 +70,24 @@ describe Cell do
       end
     end
   end
+
+  describe '#revealed?' do
+    let(:cell) { Cell.new }
+
+    context 'on initialize' do
+      it 'is not revealed' do
+        expect(cell.revealed?).to eq(false)
+      end
+    end
+
+    context 'the cell has been revealed' do
+      before do
+        cell.reveal!
+      end
+
+      it 'is revealed' do
+        expect(cell.revealed?).to eq(true)
+      end
+    end
+  end
 end
