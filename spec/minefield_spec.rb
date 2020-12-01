@@ -40,4 +40,28 @@ describe Minefield do
       end
     end
   end
+
+  describe '#rows' do
+    subject(:result) { described_class.new(width: 10, height: 15, mine_count: 5).rows }
+
+    it 'returns an array' do
+      expect(result).to be_an(Array)
+    end
+
+    it 'returns the correct number of rows' do
+      expect(result.length).to eq(15)
+    end
+
+    it 'returns the correct number of columns' do
+      expect(result.first.length).to eq(10)
+    end
+
+    it 'returns the correct number of Cells' do
+      expect(result.flatten.count { |e| e.class == Cell }).to eq(150)
+    end
+
+    it 'only returns Cells' do
+      expect(result.flatten).to all(be_a(Cell))
+    end
+  end
 end

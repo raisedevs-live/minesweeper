@@ -4,6 +4,11 @@ class Minefield
     @height = height
     @mine_count = mine_count
     validate_arguments!
+    initialize_field
+  end
+
+  def rows
+    @field
   end
 
   private
@@ -24,5 +29,16 @@ class Minefield
     end
 
     raise ArgumentError unless valid
+  end
+
+  def initialize_field
+    @field = []
+    @height.times do
+      row = []
+      @width.times do
+        row << Cell.new
+      end
+      @field << row
+    end
   end
 end
