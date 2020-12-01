@@ -64,4 +64,56 @@ describe Minefield do
       expect(result.flatten).to all(be_a(Cell))
     end
   end
+
+  describe '#reveal_at' do
+    subject(:minefield) { described_class.new(width: 10, height: 15, mine_count: 5) }
+
+    context 'invalid coordinates passed' do
+      it 'raises an Minefield::OutOfBoundsError error' do
+        expect { minefield.reveal_at(10, 5) }.to raise_exception(Minefield::OutOfBoundsError)
+      end
+    end
+
+    context 'valid coordinates passed' do
+      before do
+        minefield.reveal_at(3, 2)
+      end
+
+      it 'reveals the specifed cell' do
+        expect(minefield.cell_at(3,2).revealed?).to eq(true)
+      end
+
+      context 'the cell contains a mine' do
+      end
+
+      context 'the cell is empty' do
+        context 'there are no empty adjacent cells' do
+        end
+        context 'there are empty adjacent cells' do
+        end
+      end
+    end
+  end
+
+  describe '#cell_at' do
+    subject(:minefield) { described_class.new(width: 10, height: 15, mine_count: 5) }
+
+    context 'invalid coordinates passed' do
+      it 'raises an Minefield::OutOfBoundsError error' do
+        expect { minefield.cell_at(10, 5) }.to raise_exception(Minefield::OutOfBoundsError)
+      end
+    end
+
+    context 'valid coordinates passed' do
+      let(:result) { minefield.cell_at(2,3) }
+
+      it 'returns a cell' do
+        expect(result).to be_a(Cell)
+      end
+
+      it 'returns the correct cell' do
+        expect(result).to eq(minefield.instance_variable_get(:@field)[3][2])
+      end
+    end
+  end
 end
