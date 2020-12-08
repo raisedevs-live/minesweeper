@@ -37,6 +37,10 @@ class Minefield
     )
   end
 
+  def empty_cell_count
+    (@width * @height) - @mine_count
+  end
+
   def validate_arguments!
     valid = true
 
@@ -56,11 +60,23 @@ class Minefield
   end
 
   def initialize_field
+    cells = []
+
+    @mine_count.times do
+      cells << Cell.new(mine: true)
+    end
+
+    empty_cell_count.times do
+      cells << Cell.new
+    end
+
+    # TODO: Randomize the cells
+
     @field = []
     @height.times do
       row = []
       @width.times do
-        row << Cell.new
+        row << cells.pop
       end
       @field << row
     end

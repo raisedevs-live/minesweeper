@@ -16,6 +16,10 @@ describe Minefield do
       it 'does not raise an exception' do
         expect { result }.to_not raise_error
       end
+
+      it 'contains the correct number of cells with mines' do
+        expect(result.rows.flatten.inject(0) { |count, cell| cell.mine? ? count += 1 : count }).to eq(4)
+      end
     end
 
     context 'when intialized with invalid options' do
@@ -66,31 +70,24 @@ describe Minefield do
   end
 
   describe '#reveal_at' do
-    subject(:minefield) { described_class.new(width: 10, height: 15, mine_count: 5) }
-
+    let(:minefield) { described_class.new(width: 10, height: 15, mine_count: 5) }
     context 'invalid coordinates passed' do
+      subject(:result) { minefield.reveal_at(10, 5) }
+
       it 'raises an Minefield::OutOfBoundsError error' do
-        expect { minefield.reveal_at(10, 5) }.to raise_exception(Minefield::OutOfBoundsError)
+        expect { result }.to raise_exception(Minefield::OutOfBoundsError)
       end
     end
 
     context 'valid coordinates passed' do
-      before do
-        minefield.reveal_at(3, 2)
-      end
+      subject(:result) { minefield.reveal_at(3,2) }
 
       it 'reveals the specifed cell' do
-        expect(minefield.cell_at(3,2).revealed?).to eq(true)
+        expect(result.revealed?).to eq(true)
       end
 
-      context 'the cell contains a mine' do
-      end
-
-      context 'the cell is empty' do
-        context 'there are no empty adjacent cells' do
-        end
-        context 'there are empty adjacent cells' do
-        end
+      it 'returns the correct cell' do
+        expect(result).to eq(minefield.cell_at(3,2))
       end
     end
   end

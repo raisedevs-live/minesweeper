@@ -12,6 +12,7 @@ class Cell
 
   def reveal!
     @revealed = true
+    self
   end
 
   def revealed?

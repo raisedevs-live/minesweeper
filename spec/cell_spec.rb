@@ -74,13 +74,15 @@ describe Cell do
   describe '#reveal!' do
     let(:cell) { Cell.new }
 
-    context 'after revealiing' do
-      before do
-        cell.reveal!
-      end
+    context 'after revealing' do
+      let!(:result) { cell.reveal! }
 
       it 'reveals the cell' do
         expect(cell.revealed?).to eq(true)
+      end
+
+      it 'returns self' do
+        expect(result).to eq(cell)
       end
     end
   end
