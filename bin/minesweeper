@@ -1,0 +1,23 @@
+$: << 'lib'
+require 'minefield'
+require 'minefield_printer'
+require 'prompt'
+
+minefield = Minefield.new(width: 10, height: 10, mine_count: 1)
+printer = MinefieldPrinter.new(minefield)
+prompt = Prompt.new
+
+prompt.welcome
+
+puts printer
+
+begin
+  coords = prompt.reveal_at
+  minefield.reveal_at(coords.fetch(:x), coords.fetch(:y))
+rescue Prompt::UserInputError
+  puts "Goodbye"
+end
+
+puts printer
+
+puts "Goodbye"

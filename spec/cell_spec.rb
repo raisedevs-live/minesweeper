@@ -106,4 +106,46 @@ describe Cell do
       end
     end
   end
+
+  describe 'inspect' do
+    let(:cell) { Cell.new(mine: contains_mine) }
+    subject(:result) { cell.inspect }
+    let(:contains_mine) { false }
+
+    it 'returns a string' do
+      expect(result).to be_a(String)
+    end
+
+    context 'cell contains a mine' do
+      let(:contains_mine) { true }
+
+      it 'reports the cell contains a mine' do
+        expect(result).to include('mine: true')
+      end
+    end
+
+    context 'cell does not contain a mine' do
+      let(:contains_mine) { false }
+
+      it 'reports the cell does not contain a mine' do
+        expect(result).to include('mine: false')
+      end
+    end
+
+    context 'cell is revealed' do
+      before do
+        cell.reveal!
+      end
+
+      it 'reports the cell is revealed' do
+        expect(result).to include('revealed: true')
+      end
+    end
+
+    context 'cell is not revealed' do
+      it 'reports the cell is not revealed' do
+        expect(result).to include('revealed: false')
+      end
+    end
+  end
 end

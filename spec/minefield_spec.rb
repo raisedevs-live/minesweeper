@@ -113,4 +113,17 @@ describe Minefield do
       end
     end
   end
+
+  describe '#mine_revealed?' do
+    subject(:minefield) { described_class.new(width: 10, height: 10, mine_count: 1) }
+
+    it 'returns false if no mine has been revealed' do
+      expect(minefield.mine_revealed?).to be(false)
+    end
+
+    it 'returs true if a mine has been revealed' do
+      minefield.reveal_at(0,0)
+      expect(minefield.mine_revealed?).to be(true)
+    end
+  end
 end

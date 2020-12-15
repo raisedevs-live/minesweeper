@@ -18,4 +18,8 @@ class Cell
   def revealed?
     @revealed
   end
+
+  def inspect
+    "<Cell:revealed: #{@revealed}, mine: #{@mine}>"
+  end
 end

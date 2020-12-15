@@ -26,6 +26,10 @@ class Minefield
     @field[y][x]
   end
 
+  def mine_revealed?
+    @field.flatten.select(&:revealed?).any?(&:mine?)
+  end
+
   private
 
   def check_bounds!(x, y)
@@ -76,7 +80,7 @@ class Minefield
     @height.times do
       row = []
       @width.times do
-        row << cells.pop
+        row << cells.shift
       end
       @field << row
     end
