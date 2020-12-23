@@ -44,10 +44,12 @@ RSpec.describe "Command Line Interface" do
     end
 
     context 'the user reveals all of the empty cells' do
-      it 'does not tell the user they lost' do
+      it 'tells the player they won' do
         o, e, s = run_minesweeper(stdin_data: reveal_all_cells_string)
         aggregate_failures do
-          expect(o).not_to include("You lose")
+          expect(o).not_to include("💣")
+          expect(o).to include("You win")
+          expect(o.end_with?("Goodbye\n")).to be(true)
         end
       end
     end

@@ -4,6 +4,8 @@ class Prompt
     WELCOME = "Welcome to Minesweeper"
     REVEAL_AT  = "Enter the coordinates of the cell you would like to reveal."
     LOSE = "You lose"
+    WIN = "You win"
+    EXIT = "Goodbye"
   end
 
   def welcome
@@ -17,6 +19,14 @@ class Prompt
 
   def lose
     puts STRINGS::LOSE
+  end
+
+  def win
+    puts STRINGS::WIN
+  end
+
+  def exit
+    puts STRINGS::EXIT
   end
 
   private

@@ -14,22 +14,21 @@ while(!minefield.cleared?) do
   begin
     input = prompt.reveal_at
   rescue Prompt::UserInputError
-    puts "Goodbye"
+    prompt.exit
     exit
   end
-
-  continue = true
 
   input.each do |coords|
     cell = minefield.reveal_at(coords.fetch(:x), coords.fetch(:y))
     puts printer
     if cell.mine?
       prompt.lose
-      continue = false
-      break
+      prompt.exit
+      exit
     end
   end
-  break unless continue
 end
 
-puts "Goodbye"
+prompt.win
+prompt.exit
+exit

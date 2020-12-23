@@ -68,4 +68,20 @@ describe Prompt do
       expect(result).to eq(nil)
     end
   end
+
+  describe '#win' do
+    let(:result) { prompt.win }
+
+    it 'prints the win message' do
+      expect { result }.to output("#{Prompt::STRINGS::WIN}\n").to_stdout
+    end
+  end
+
+  describe '#exit' do
+    let(:result) { prompt.exit }
+
+    it 'prints the exit message' do
+      expect{ result }.to output("#{Prompt::STRINGS::EXIT}\n").to_stdout
+    end
+  end
 end
