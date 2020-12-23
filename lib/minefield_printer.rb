@@ -1,7 +1,7 @@
 class MinefieldPrinter
   module STRINGS
-    CLOSED_CELL = "⬜️"
-    REVEALED_CELL = "🔲"
+    CLOSED = "⬜️"
+    EMPTY = "🔲"
     MINE = "💣"
   end
 
@@ -24,7 +24,7 @@ class MinefieldPrinter
   private
 
   def character_for_cell(cell)
-    return STRINGS::CLOSED_CELL unless cell.revealed?
-    STRINGS::MINE
+    return STRINGS::CLOSED unless cell.revealed?
+    cell.mine? ? STRINGS::MINE : STRINGS::EMPTY
   end
 end
