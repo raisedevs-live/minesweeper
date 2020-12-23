@@ -4,7 +4,7 @@ describe Prompt do
   subject(:prompt) { described_class.new }
 
   describe '#welcome' do
-    let(:result ) { prompt.welcome }
+    let(:result) { prompt.welcome }
 
     it 'prints the welcome message' do
       expect { result }.to output("#{Prompt::STRINGS::WELCOME}\n").to_stdout
@@ -18,7 +18,7 @@ describe Prompt do
   describe '#reveal_at' do
     let(:result) { prompt.reveal_at }
 
-    context 'valid user input' do
+    context 'singular valid user input' do
       before do
         allow(prompt).to receive(:gets).and_return('3,7')
       end
@@ -28,8 +28,21 @@ describe Prompt do
       end
 
       it 'returns the coordinates' do
+        expect(result).to eq( [ {x: 3, y:7 } ] )
+      end
+    end
 
-        expect(result).to eq( {x: 3, y:7 } )
+    context 'plural valid user input' do
+      before do
+        allow(prompt).to receive(:gets).and_return('3,7:2,4')
+      end
+
+      it 'prints the reveal prompt' do
+        expect { result }.to output("#{Prompt::STRINGS::REVEAL_AT}\n").to_stdout
+      end
+
+      it 'returns the coordinates' do
+        expect(result).to eq( [ {x: 3, y:7 }, {x: 2, y:4 } ] )
       end
     end
 
@@ -41,6 +54,18 @@ describe Prompt do
       it 'raises a UserInputError' do
         expect { result }.to raise_error(Prompt::UserInputError)
       end
+    end
+  end
+
+  describe '#lose' do
+    let(:result) { prompt.lose }
+
+    it 'prints the lose message' do
+      expect { result }.to output("#{Prompt::STRINGS::LOSE}\n").to_stdout
+    end
+
+    it 'returns nil' do
+      expect(result).to eq(nil)
     end
   end
 end

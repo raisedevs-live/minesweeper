@@ -8,16 +8,28 @@ printer = MinefieldPrinter.new(minefield)
 prompt = Prompt.new
 
 prompt.welcome
-
 puts printer
 
-begin
-  coords = prompt.reveal_at
-  minefield.reveal_at(coords.fetch(:x), coords.fetch(:y))
-rescue Prompt::UserInputError
-  puts "Goodbye"
+while(!minefield.cleared?) do
+  begin
+    input = prompt.reveal_at
+  rescue Prompt::UserInputError
+    puts "Goodbye"
+    exit
+  end
+
+  continue = true
+
+  input.each do |coords|
+    cell = minefield.reveal_at(coords.fetch(:x), coords.fetch(:y))
+    puts printer
+    if cell.mine?
+      prompt.lose
+      continue = false
+      break
+    end
+  end
+  break unless continue
 end
-
-puts printer
 
 puts "Goodbye"

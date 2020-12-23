@@ -30,6 +30,11 @@ class Minefield
     @field.flatten.select(&:revealed?).any?(&:mine?)
   end
 
+  def cleared?
+    return true if @field.flatten.reject(&:mine?).all?(&:revealed?)
+    false
+  end
+
   private
 
   def check_bounds!(x, y)

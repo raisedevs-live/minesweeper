@@ -126,4 +126,23 @@ describe Minefield do
       expect(minefield.mine_revealed?).to be(true)
     end
   end
+
+  describe '#cleared?' do
+    subject(:minefield) { described_class.new(width: 10, height: 10, mine_count: 1) }
+
+    context 'all empty cells revealed' do
+      it 'returns true' do
+        cells = minefield.rows.flatten
+        cells.shift
+        cells.map(&:reveal!)
+        expect(minefield.cleared?).to be(true)
+      end
+    end
+
+    context 'some empty cells not revealed' do
+      it 'returns false' do
+        expect(minefield.cleared?).to be(false)
+      end
+    end
+  end
 end
