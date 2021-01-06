@@ -26,7 +26,7 @@ describe MinefieldPrinter do
   end
 
   describe '#to_s' do
-    let(:minefield) { Minefield.new(width: 10, height: 10, mine_count: 4) }
+    let(:minefield) { Minefield.new(width: 10, height: 10, mine_count: 4, seed: :none) }
     subject(:printer) { described_class.new(minefield)}
 
     it 'returns a string' do

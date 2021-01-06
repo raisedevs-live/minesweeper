@@ -4,7 +4,7 @@ require './lib/minefield_printer'
 
 RSpec.describe "Command Line Interface" do
   def run_minesweeper(stdin_data: "")
-    Open3.capture3('bundle exec ruby ./bin/minesweeper', stdin_data: stdin_data)
+    Open3.capture3('SHUFFLE=false bundle exec ruby ./bin/minesweeper', stdin_data: stdin_data)
   end
 
   def reveal_all_cells_string

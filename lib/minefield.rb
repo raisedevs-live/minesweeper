@@ -3,10 +3,11 @@ require_relative './cell.rb'
 class Minefield
   class OutOfBoundsError < StandardError; end
 
-  def initialize(width:, height:, mine_count:)
+  def initialize(width:, height:, mine_count:, seed: :random)
     @width = width
     @height = height
     @mine_count = mine_count
+    @seed = seed
     validate_arguments!
     initialize_field
   end
@@ -65,6 +66,10 @@ class Minefield
       valid = false
     end
 
+    unless (@seed == :none || @seed == :random || @seed.class == Integer)
+      valid = false
+    end
+
     raise ArgumentError unless valid
   end
 
@@ -79,7 +84,11 @@ class Minefield
       cells << Cell.new
     end
 
-    # TODO: Randomize the cells
+    if @seed == :random
+      cells.shuffle!
+    elsif @seed.class == Integer
+      cells.shuffle!(random: Random.new(@seed))
+    end
 
     @field = []
     @height.times do

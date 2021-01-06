@@ -3,7 +3,12 @@ require 'minefield'
 require 'minefield_printer'
 require 'prompt'
 
-minefield = Minefield.new(width: 10, height: 10, mine_count: 1)
+minefield = if ENV['SHUFFLE'] != nil
+  Minefield.new(width: 10, height: 10, mine_count: 1, seed: :none)
+else
+  Minefield.new(width: 10, height: 10, mine_count: 1)
+end
+
 printer = MinefieldPrinter.new(minefield)
 prompt = Prompt.new
 

@@ -22,6 +22,34 @@ describe Minefield do
       end
     end
 
+    context 'when initialized with optional randomization arguments' do
+      subject(:result) { described_class.new(width: width, height: height, mine_count: mine_count, seed: seed) }
+      let(:width) { 10 }
+      let(:height) { 10}
+      let(:mine_count) { 4 }
+
+      context 'the seed is nil' do
+        let(:seed) { :none }
+
+        it 'does not shuffle the cells' do
+          expect(result.rows.first[0..3].all?(&:mine?)).to be(true)
+        end
+      end
+
+      context 'the seed is an integer' do
+        let(:seed) { 1 }
+
+        it 'shuffles the cells the same way every time' do
+          aggregate_failures do
+            expect(result.cell_at(0,2).mine?).to be(true)
+            expect(result.cell_at(8,5).mine?).to be(true)
+            expect(result.cell_at(8,6).mine?).to be(true)
+            expect(result.cell_at(0,9).mine?).to be(true)
+          end
+        end
+      end
+    end
+
     context 'when intialized with invalid options' do
       context 'invalid dimension' do
         let(:width) { 0 }
@@ -37,6 +65,18 @@ describe Minefield do
         let(:width) { 5 }
         let(:height) { 5 }
         let(:mine_count) { 26 }
+
+        it 'raises an ArgumentError' do
+          expect { result }.to raise_error(ArgumentError)
+        end
+      end
+
+      context 'invalid seed' do
+        subject(:result) { described_class.new(width: width, height: height, mine_count: mine_count, seed: seed) }
+        let(:width) { 5 }
+        let(:height) { 5 }
+        let(:mine_count) { 1 }
+        let(:seed) { :invalid }
 
         it 'raises an ArgumentError' do
           expect { result }.to raise_error(ArgumentError)
@@ -115,7 +155,7 @@ describe Minefield do
   end
 
   describe '#mine_revealed?' do
-    subject(:minefield) { described_class.new(width: 10, height: 10, mine_count: 1) }
+    subject(:minefield) { described_class.new(width: 10, height: 10, mine_count: 1, seed: :none) }
 
     it 'returns false if no mine has been revealed' do
       expect(minefield.mine_revealed?).to be(false)
@@ -128,7 +168,7 @@ describe Minefield do
   end
 
   describe '#cleared?' do
-    subject(:minefield) { described_class.new(width: 10, height: 10, mine_count: 1) }
+    subject(:minefield) { described_class.new(width: 10, height: 10, mine_count: 1, seed: :none) }
 
     context 'all empty cells revealed' do
       it 'returns true' do
