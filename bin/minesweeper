@@ -25,13 +25,14 @@ while(!minefield.cleared?) do
 
   input.each do |coords|
     cell = minefield.reveal_at(coords.fetch(:x), coords.fetch(:y))
-    puts printer
     if cell.mine?
+      puts printer
       prompt.lose
       prompt.exit
       exit
     end
   end
+  puts printer
 end
 
 prompt.win
