@@ -148,4 +148,89 @@ describe Cell do
       end
     end
   end
+
+  describe '#hint=' do
+    let(:cell) { Cell.new(mine: mine) }
+
+    context 'empty cell' do
+      let(:mine) { false }
+
+      context 'invalid argument' do
+        context 'incorrect type' do
+          it 'raises an ArgumentError' do
+            expect { cell.hint = 'a' }.to raise_error(ArgumentError)
+          end
+        end
+
+        context 'below the minimum' do
+          it 'raises an ArgumentError' do
+            expect { cell.hint = -1 }.to raise_error(ArgumentError)
+          end
+        end
+
+        context 'above the maximum' do
+          it 'raises an ArgumentError' do
+            expect { cell.hint = 9 }.to raise_error(ArgumentError)
+          end
+        end
+      end
+
+      context 'valid argument' do
+        it 'sets the hint value' do
+          cell.hint = 4
+          expect(cell.hint).to eq(4)
+        end
+
+        it 'sets the max hint value' do
+          cell.hint = 8
+          expect(cell.hint).to eq(8)
+        end
+
+        it 'sets the min hint value' do
+          cell.hint = 0
+          expect(cell.hint).to eq(0)
+        end
+      end
+    end
+
+    context 'cell with mine' do
+      let(:mine) { true }
+
+      it 'raises HintError::CannotSet' do
+        expect { cell.hint = 4 }.to raise_error(Cell::HintError::CannotSet)
+      end
+    end
+  end
+
+  describe '#hint' do
+    let(:cell) { Cell.new(mine: mine) }
+
+    context 'empty cell' do
+      let(:mine) { false }
+
+      context 'hint is not set' do
+        it 'raises an HintError::Unknown error' do
+          expect { cell.hint }.to raise_error(Cell::HintError::Unknown)
+        end
+      end
+
+      context 'hint is set' do
+        before do
+          cell.hint = 4
+        end
+
+        it 'returns the hint' do
+          expect(cell.hint).to eq(4)
+        end
+      end
+    end
+
+    context 'cell with mine' do
+      let(:mine) { true }
+
+      it 'raises a HintErorr::HasMine' do
+        expect { cell.hint }.to raise_error(Cell::HintError::HasMine)
+      end
+    end
+  end
 end
