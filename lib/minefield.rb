@@ -98,5 +98,37 @@ class Minefield
       end
       @field << row
     end
+
+    set_hints
+  end
+
+  def set_hints
+    rows.each_with_index do |row, y|
+      row.each_with_index do |cell, x|
+        hint = hint_for_cell_at(x, y)
+        cell.hint = hint unless cell.mine?
+      end
+    end
+  end
+
+  def hint_for_cell_at(x, y)
+    neighbors = []
+    neighbor_coordinates = [
+      { x: x-1, y: y },
+      { x: x+1, y: y },
+      { x: x, y: y-1 },
+      { x: x, y: y+1 },
+      { x: x-1, y: y-1 },
+      { x: x+1, y: y+1 },
+      { x: x-1, y: y+1 },
+      { x: x+1, y: y-1 }
+    ]
+
+    neighbor_coordinates.each do |coords|
+      neighbors << cell_at(coords.fetch(:x), coords.fetch(:y))
+    rescue OutOfBoundsError
+    end
+
+    neighbors.reduce(0) { |count, cell| cell.mine? ? count + 1 : count }
   end
 end

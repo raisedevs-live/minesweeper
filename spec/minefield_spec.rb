@@ -28,11 +28,39 @@ describe Minefield do
       let(:height) { 10}
       let(:mine_count) { 4 }
 
-      context 'the seed is nil' do
+      context 'the seed is none' do
         let(:seed) { :none }
 
         it 'does not shuffle the cells' do
           expect(result.rows.first[0..3].all?(&:mine?)).to be(true)
+        end
+
+        it 'sets the correct hint on each cell' do
+          # row 0: XXXX1OOOOO
+          # row 1: 23321OOOOO
+          # row 2: OOOOOOOOOO (continues to row 9)
+
+          aggregate_failures 'mines' do
+            expect { result.cell_at(0,0).hint }.to raise_error(Cell::HintError::HasMine)
+            expect { result.cell_at(1,0).hint }.to raise_error(Cell::HintError::HasMine)
+            expect { result.cell_at(2,0).hint }.to raise_error(Cell::HintError::HasMine)
+            expect { result.cell_at(3,0).hint }.to raise_error(Cell::HintError::HasMine)
+          end
+
+          aggregate_failures 'zero hints' do
+            expect(result.rows[0][5..9].all? { |cell| cell.hint == 0}).to be(true)
+            expect(result.rows[1][5..9].all? { |cell| cell.hint == 0}).to be(true)
+            expect(result.rows[2..9].flatten.all? { |cell| cell.hint == 0}).to be(true)
+          end
+
+          aggregate_failures 'nonzero hints' do
+            expect(result.cell_at(4,0).hint).to eq(1)
+            expect(result.cell_at(0,1).hint).to eq(2)
+            expect(result.cell_at(1,1).hint).to eq(3)
+            expect(result.cell_at(2,1).hint).to eq(3)
+            expect(result.cell_at(3,1).hint).to eq(2)
+            expect(result.cell_at(4,1).hint).to eq(1)
+          end
         end
       end
 
@@ -45,6 +73,32 @@ describe Minefield do
             expect(result.cell_at(8,5).mine?).to be(true)
             expect(result.cell_at(8,6).mine?).to be(true)
             expect(result.cell_at(0,9).mine?).to be(true)
+          end
+        end
+
+        xit 'sets the correct hint on each cell' do
+          # TODO: Map the minefield for seed == 1
+          # row 0:
+          # row 1:
+          # row 2:
+          # row 3:
+          # row 4:
+          # row 5:
+          # row 6:
+          # row 7:
+          # row 8:
+          # row 9:
+
+          aggregate_failures 'mines' do
+            expect { result.cell_at(0,0).hint }.to raise_error(Cell::HintError::HasMine)
+          end
+
+          aggregate_failures 'zero hints' do
+            expect(result.rows[0][0..9].all? { |cell| cell.hint == 0}).to be(true)
+          end
+
+          aggregate_failures 'nonzero hints' do
+            expect(result.cell_at(0,0).hint).to eq(2)
           end
         end
       end
