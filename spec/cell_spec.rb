@@ -107,7 +107,7 @@ describe Cell do
     end
   end
 
-  describe 'inspect' do
+  describe '#inspect' do
     let(:cell) { Cell.new(mine: contains_mine) }
     subject(:result) { cell.inspect }
     let(:contains_mine) { false }
