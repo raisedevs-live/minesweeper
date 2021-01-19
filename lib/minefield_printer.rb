@@ -3,6 +3,16 @@ class MinefieldPrinter
     CLOSED = "⬜️"
     EMPTY = "🔲"
     MINE = "💣"
+    HINTS = {
+              1 => "1️⃣",
+              2 => "2️⃣",
+              3 => "3️⃣",
+              4 => "4️⃣",
+              5 => "5️⃣",
+              6 => "6️⃣",
+              7 => "7️⃣",
+              8 => "8️⃣"
+            }
   end
 
   def initialize(minefield)
@@ -25,6 +35,12 @@ class MinefieldPrinter
 
   def character_for_cell(cell)
     return STRINGS::CLOSED unless cell.revealed?
-    cell.mine? ? STRINGS::MINE : STRINGS::EMPTY
+    if cell.mine?
+      STRINGS::MINE
+    elsif cell.hint == 0
+      STRINGS::EMPTY
+    else
+      STRINGS::HINTS[cell.hint]
+    end
   end
 end

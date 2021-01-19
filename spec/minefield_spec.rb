@@ -76,29 +76,58 @@ describe Minefield do
           end
         end
 
-        xit 'sets the correct hint on each cell' do
-          # TODO: Map the minefield for seed == 1
-          # row 0:
-          # row 1:
-          # row 2:
-          # row 3:
-          # row 4:
-          # row 5:
-          # row 6:
-          # row 7:
-          # row 8:
-          # row 9:
+        it 'sets the correct hint on each cell' do
+          # 10x10 4 mines with seed of 1
+          # row 0: OOOOOOOOOO
+          # row 1: 11OOOOOOOO
+          # row 2: X1OOOOOOOO
+          # row 3: 11OOOOOOOO
+          # row 4: OOOOOOO111
+          # row 5: OOOOOOO2X2
+          # row 6: OOOOOOO2X2
+          # row 7: OOOOOOO111
+          # row 8: 11OOOOOOOO
+          # row 9: X1OOOOOOOO
 
           aggregate_failures 'mines' do
-            expect { result.cell_at(0,0).hint }.to raise_error(Cell::HintError::HasMine)
+            expect { result.cell_at(0,2).hint }.to raise_error(Cell::HintError::HasMine)
+            expect { result.cell_at(8,5).hint }.to raise_error(Cell::HintError::HasMine)
+            expect { result.cell_at(8,6).hint }.to raise_error(Cell::HintError::HasMine)
+            expect { result.cell_at(0,9).hint }.to raise_error(Cell::HintError::HasMine)
           end
 
-          aggregate_failures 'zero hints' do
-            expect(result.rows[0][0..9].all? { |cell| cell.hint == 0}).to be(true)
-          end
+          # aggregate_failures 'zero hints' do
+          #   # TODO: all other cells should have hint zero
+          #   expect(result.rows[0][0..9].all? { |cell| cell.hint == 0}).to be(true)
+          # end
 
           aggregate_failures 'nonzero hints' do
-            expect(result.cell_at(0,0).hint).to eq(2)
+            expect(result.cell_at(0,1).hint).to eq(1)
+            expect(result.cell_at(1,1).hint).to eq(1)
+
+            expect(result.cell_at(1,2).hint).to eq(1)
+
+            expect(result.cell_at(0,3).hint).to eq(1)
+            expect(result.cell_at(1,3).hint).to eq(1)
+
+            expect(result.cell_at(7,4).hint).to eq(1)
+            expect(result.cell_at(8,4).hint).to eq(1)
+            expect(result.cell_at(9,4).hint).to eq(1)
+
+            expect(result.cell_at(7,5).hint).to eq(2)
+            expect(result.cell_at(9,5).hint).to eq(2)
+
+            expect(result.cell_at(7,6).hint).to eq(2)
+            expect(result.cell_at(9,6).hint).to eq(2)
+
+            expect(result.cell_at(7,7).hint).to eq(1)
+            expect(result.cell_at(8,7).hint).to eq(1)
+            expect(result.cell_at(9,7).hint).to eq(1)
+
+            expect(result.cell_at(0,8).hint).to eq(1)
+            expect(result.cell_at(1,8).hint).to eq(1)
+
+            expect(result.cell_at(1,9).hint).to eq(1)
           end
         end
       end
@@ -182,6 +211,10 @@ describe Minefield do
 
       it 'returns the correct cell' do
         expect(result).to eq(minefield.cell_at(3,2))
+      end
+
+      it 'reveals sweeped cells' do
+
       end
     end
   end
