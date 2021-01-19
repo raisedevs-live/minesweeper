@@ -3,10 +3,15 @@ require 'minefield'
 require 'minefield_printer'
 require 'prompt'
 
-minefield = if ENV['SHUFFLE'] != nil
-  Minefield.new(width: 10, height: 10, mine_count: 1, seed: :none)
+width = ENV.fetch('WIDTH', 10).to_i
+height = ENV.fetch('HEIGHT', 10).to_i
+mine_count = ENV.fetch('MINE_COUNT', 1).to_i
+shuffle = ENV.fetch('SHUFFLE', nil)
+
+minefield = if shuffle != nil
+  Minefield.new(width: width, height: height, mine_count: mine_count, seed: :none)
 else
-  Minefield.new(width: 10, height: 10, mine_count: 1)
+  Minefield.new(width: width, height: width, mine_count: mine_count)
 end
 
 printer = MinefieldPrinter.new(minefield)
