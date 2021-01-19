@@ -20,6 +20,11 @@ class Minefield
     check_bounds!(x, y)
     cell = cell_at(x, y)
     cell.reveal!
+    begin
+      sweep(x,y) if !cell.mine? && cell.hint == 0
+    rescue Cell::HintError::HasMine
+    end
+    cell
   end
 
   def cell_at(x, y)
@@ -102,18 +107,21 @@ class Minefield
     set_hints
   end
 
-  def set_hints
-    rows.each_with_index do |row, y|
-      row.each_with_index do |cell, x|
-        hint = hint_for_cell_at(x, y)
-        cell.hint = hint unless cell.mine?
+  def sweep(x, y)
+    neighbor_coordinates(x,y).each do |coords|
+      cell = cell_at(coords.fetch(:x), coords.fetch(:y))
+      if cell.hint > 0
+        cell.reveal!
+      else
+        reveal_at(coords.fetch(:x), coords.fetch(:y)) unless cell.revealed?
       end
     end
+  rescue Cell::HintError::HasMine
   end
 
-  def hint_for_cell_at(x, y)
-    neighbors = []
-    neighbor_coordinates = [
+  def neighbor_coordinates(x, y)
+    valid_neighbor_coordinates = []
+    possible_neighbor_coordinates = [
       { x: x-1, y: y },
       { x: x+1, y: y },
       { x: x, y: y-1 },
@@ -124,11 +132,32 @@ class Minefield
       { x: x+1, y: y-1 }
     ]
 
-    neighbor_coordinates.each do |coords|
-      neighbors << cell_at(coords.fetch(:x), coords.fetch(:y))
+    possible_neighbor_coordinates.each do |coords|
+      cell_at(coords.fetch(:x), coords.fetch(:y))
+      valid_neighbor_coordinates << coords
     rescue OutOfBoundsError
     end
+    valid_neighbor_coordinates
+  end
 
-    neighbors.reduce(0) { |count, cell| cell.mine? ? count + 1 : count }
+  def neighbors(x, y)
+    neighbors = []
+    neighbor_coordinates(x,y).each do |coords|
+      neighbors << cell_at(coords.fetch(:x), coords.fetch(:y))
+    end
+    neighbors
+  end
+
+  def set_hints
+    rows.each_with_index do |row, y|
+      row.each_with_index do |cell, x|
+        hint = hint_for_cell_at(x, y)
+        cell.hint = hint unless cell.mine?
+      end
+    end
+  end
+
+  def hint_for_cell_at(x, y)
+    neighbors(x,y).reduce(0) { |count, cell| cell.mine? ? count + 1 : count }
   end
 end

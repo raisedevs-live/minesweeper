@@ -193,7 +193,19 @@ describe Minefield do
   end
 
   describe '#reveal_at' do
-    let(:minefield) { described_class.new(width: 10, height: 15, mine_count: 5) }
+    let(:minefield) { described_class.new(width: 10, height: 10, mine_count: 4, seed: 1) }
+    # 10x10 4 mines with seed of 1
+    # row 0: OOOOOOOOOO
+    # row 1: 11OOOOOOOO
+    # row 2: X1OOOOOOOO
+    # row 3: 11OOOOOOOO
+    # row 4: OOOOOOO111
+    # row 5: OOOOOOO2X2
+    # row 6: OOOOOOO2X2
+    # row 7: OOOOOOO111
+    # row 8: 11OOOOOOOO
+    # row 9: X1OOOOOOOO
+
     context 'invalid coordinates passed' do
       subject(:result) { minefield.reveal_at(10, 5) }
 
@@ -212,9 +224,40 @@ describe Minefield do
       it 'returns the correct cell' do
         expect(result).to eq(minefield.cell_at(3,2))
       end
+    end
 
-      it 'reveals sweeped cells' do
+    context 'sweeping' do
+      let(:revealed_count) do
+        minefield.rows.flatten.reduce(0) do |revealed_count, cell|
+          cell.revealed? ? revealed_count += 1 : revealed_count
+        end
+      end
 
+      context 'no sweeping needed' do
+        before do
+          minefield.reveal_at(1,3)
+        end
+
+        it 'reveals exactly one cell' do
+          expect(revealed_count).to eq(1)
+        end
+      end
+
+      context 'sweeping required' do
+        before do
+          minefield.reveal_at(0,0)
+        end
+
+        it 'reveals the correct number of cells' do
+          expect(revealed_count).to eq(94)
+        end
+
+        it 'does not sweep past hints' do
+          aggregate_failures do
+            expect(minefield.cell_at(9,5).revealed?).to eq(false)
+            expect(minefield.cell_at(9,6).revealed?).to eq(false)
+          end
+        end
       end
     end
   end

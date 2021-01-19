@@ -7,17 +7,6 @@ RSpec.describe "Command Line Interface" do
     Open3.capture3('SHUFFLE=false bundle exec ruby ./bin/minesweeper', stdin_data: stdin_data)
   end
 
-  def reveal_all_cells_string
-    result = []
-    (0..9).each do |x|
-      (0..9).each do |y|
-        result << "#{x},#{y}"
-      end
-    end
-    result.shift
-    result.join(':')
-  end
-
   it 'if the input stream is closed before the game is finished it prints goodbye and exits with status code zero' do
     o, e, s = run_minesweeper
     aggregate_failures do
@@ -45,7 +34,7 @@ RSpec.describe "Command Line Interface" do
 
     context 'the user reveals all of the empty cells' do
       it 'tells the player they won' do
-        o, e, s = run_minesweeper(stdin_data: reveal_all_cells_string)
+        o, e, s = run_minesweeper(stdin_data: "2,2\n")
         aggregate_failures do
           expect(o).not_to include("💣")
           expect(o).to include("You win")
