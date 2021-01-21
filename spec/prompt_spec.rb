@@ -4,10 +4,10 @@ describe Prompt do
   subject(:prompt) { described_class.new }
 
   describe '#welcome' do
-    let(:result) { prompt.welcome }
+    let(:result) { prompt.welcome(width: 10, height: 10, mine_count: 4, seed: 123) }
 
     it 'prints the welcome message' do
-      expect { result }.to output("#{Prompt::STRINGS::WELCOME}\n").to_stdout
+      expect { result }.to output("#{Prompt::STRINGS::WELCOME}\n10x10, Mines: 4, Seed: 123\n").to_stdout
     end
 
     it 'returns nil' do
