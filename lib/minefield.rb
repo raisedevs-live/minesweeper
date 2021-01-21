@@ -92,7 +92,9 @@ class Minefield
     end
 
     if @seed == :random
-      cells.shuffle!
+      rng = Random.new
+      @seed = rng.seed
+      cells.shuffle!(random: rng)
     elsif @seed.class == Integer
       cells.shuffle!(random: Random.new(@seed))
     end
