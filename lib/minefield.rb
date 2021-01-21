@@ -3,6 +3,8 @@ require_relative './cell.rb'
 class Minefield
   class OutOfBoundsError < StandardError; end
 
+  attr_reader :width, :height, :mine_count, :seed
+
   def initialize(width:, height:, mine_count:, seed: :random)
     @width = width
     @height = height
