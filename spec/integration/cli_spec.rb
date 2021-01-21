@@ -4,7 +4,7 @@ require './lib/minefield_printer'
 
 RSpec.describe "Command Line Interface" do
   def run_minesweeper(stdin_data: "")
-    Open3.capture3('SHUFFLE=false bundle exec ruby ./bin/minesweeper', stdin_data: stdin_data)
+    Open3.capture3('SEED=none bundle exec ruby ./bin/minesweeper', stdin_data: stdin_data)
   end
 
   it 'if the input stream is closed before the game is finished it prints goodbye and exits with status code zero' do

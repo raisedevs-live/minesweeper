@@ -6,12 +6,14 @@ require 'prompt'
 width = ENV.fetch('WIDTH', 10).to_i
 height = ENV.fetch('HEIGHT', 10).to_i
 mine_count = ENV.fetch('MINE_COUNT', 1).to_i
-shuffle = ENV.fetch('SHUFFLE', nil)
+seed = ENV.fetch('SEED', nil)
 
-minefield = if shuffle != nil
+minefield = if seed == nil
+  Minefield.new(width: width, height: width, mine_count: mine_count)
+elsif seed == "none"
   Minefield.new(width: width, height: height, mine_count: mine_count, seed: :none)
 else
-  Minefield.new(width: width, height: width, mine_count: mine_count)
+  Minefield.new(width: width, height: height, mine_count: mine_count, seed: seed.to_i)
 end
 
 printer = MinefieldPrinter.new(minefield)
