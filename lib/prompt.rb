@@ -8,7 +8,7 @@ class Prompt
     EXIT = "Goodbye"
   end
 
-  def welcome(width: "?", height: "?", mine_count: "?", seed: "?")
+  def welcome(width:, height:, mine_count:, seed:)
     puts STRINGS::WELCOME
     puts "#{width}x#{height}, Mines: #{mine_count}, Seed: #{seed}"
   end

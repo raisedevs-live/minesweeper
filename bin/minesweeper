@@ -19,7 +19,12 @@ end
 printer = MinefieldPrinter.new(minefield)
 prompt = Prompt.new
 
-prompt.welcome
+prompt.welcome(
+  width: minefield.width,
+  height: minefield.height,
+  mine_count: minefield.mine_count,
+  seed: minefield.seed
+)
 puts printer
 
 while(!minefield.cleared?) do
